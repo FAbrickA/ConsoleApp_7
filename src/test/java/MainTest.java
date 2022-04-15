@@ -2,11 +2,13 @@ import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fabricka.FileSizeFinder;
+import com.fabricka.FileSizeFinder.FileInfo;
 
 public class MainTest {
     final String PARENT_PATH = "src/test/resources/";
@@ -24,7 +26,17 @@ public class MainTest {
             830834,
     };
 
+    // {(true, 1024), (true, 1000), (false, 1024), (false, 1000)}
+    final Map<Long, String[]> byteSizeStringAnswers = new HashMap<Long, String[]>() {{
+        put(fileSizes[0], new String[]{"50b", "50b", "0.05", "0.05"});
+        put(fileSizes[1], new String[]{"4.03Mb", "4.22Mb", "4129.73", "4228.85"});
+        put(fileSizes[2], new String[]{"0b", "0b", "0.00", "0.00"});
+        put(fileSizes[3], new String[]{"811.36Kb", "830.83Kb", "811.36", "830.83"});
+    }};
+
+    // доступ к ресурсам
     private File getTestFile(String pathname) {
+//        return new File(this.getClass().getResource(pathname).getFile());
         return new File(PARENT_PATH + pathname);
     }
 
@@ -49,14 +61,8 @@ public class MainTest {
 
     @Test
     void testSizeConverse() {
-        final Map<Long, String[]> answers = new HashMap<>();
-        answers.put(fileSizes[0], new String[]{"50b", "50b", "0.05", "0.05"});
-        answers.put(fileSizes[1], new String[]{"4.03Mb", "4.22Mb", "4129.73", "4228.85"});
-        answers.put(fileSizes[2], new String[]{"0b", "0b", "0.00", "0.00"});
-        answers.put(fileSizes[3], new String[]{"811.36Kb", "830.83Kb", "811.36", "830.83"});
-
         for (long size: fileSizes) {
-            testOneSizeConverse(size, answers.get(size));
+            testOneSizeConverse(size, byteSizeStringAnswers.get(size));
         }
     }
 
@@ -68,6 +74,23 @@ public class MainTest {
             for (int base: new int[]{1024, 1000}) {
                 final String totalSize = FileSizeFinder.getTotalSize(files, isHumanReadable, base);
                 assertEquals(totalSize, answers[i++]);
+            }
+        }
+    }
+
+    @Test
+    void testGetFilesInfo() {
+        int i = 0;
+        for (boolean isHumanReadable: new boolean[]{true, false}) {
+            for (int base: new int[]{1024, 1000}) {
+                FileInfo[] filesInfo = FileSizeFinder.getFilesInfo(files, isHumanReadable, base);
+                for (int j = 0; j < filesInfo.length; j++) {
+                    final FileInfo currentFileInfo = filesInfo[j];
+                    final File currentFile = files[j];
+                    final String correctByteSizeString = byteSizeStringAnswers.get(fileSizes[j])[i];
+                    assertEquals(new FileInfo(currentFile, correctByteSizeString), currentFileInfo);
+                }
+                i++;
             }
         }
     }

@@ -13,7 +13,7 @@ public class Main {
         try {
             cmdArgs = new CommandLineArguments(args);
         } catch (CmdLineException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             System.exit(1);
             return;
         }
@@ -30,9 +30,9 @@ public class Main {
                     FileSizeFinder.getFilesInfo(files, humanReadable, base);
             for (FileSizeFinder.FileInfo fileInfo: filesInfo) {
                 System.out.println(
-                        (fileInfo.file.isFile() ? "File:       " : "Directory:  ") +
-                        fileInfo.file.getPath() +
-                        "  \t" + fileInfo.size);
+                        (fileInfo.getFile().isFile() ? "File:       " : "Directory:  ") +
+                        fileInfo.getFile().getPath() +
+                        "  \t" + fileInfo.getSize());
             }
         }
     }

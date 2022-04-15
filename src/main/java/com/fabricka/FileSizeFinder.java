@@ -9,19 +9,26 @@ public class FileSizeFinder {
     private static final boolean DEFAULT_HUMAN_READABLE = false;
     private static final int DEFAULT_BASE = 1024;
 
-    public static class FileInfo {
-        public File file;
-        public String size;
-
+    public static class FileInfo { // private done !!!
+        private final File file;
+        private final String size;
         public FileInfo(File file, String size) {
             this.file = file;
             this.size = size;
+        }
+
+        public File getFile() {
+            return file;
+        }
+
+        public String getSize() {
+            return size;
         }
     }
 
 
     private static void checkFileIsCorrect(File file) {
-        if (!file.exists()) throw new IllegalArgumentException("'" + file.getPath() + "' is not founded");
+        if (!file.exists()) throw new IllegalArgumentException("File '" + file.getPath() + "' not found");
     }
 
     public static long getFileSize(File file) {
@@ -92,7 +99,7 @@ public class FileSizeFinder {
     }
 
     public static FileInfo[] getFilesInfo(File[] files, boolean humanReadable, int base) {
-        FileInfo[] result = new FileInfo[files.length];
+        FileInfo[] result = new FileInfo[files.length]; // tests done !!!
         File file;
         for (int i = 0; i < files.length; i++) {
             file = files[i];

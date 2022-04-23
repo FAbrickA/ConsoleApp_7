@@ -41,7 +41,7 @@ public class CommandLineArguments {
     public CommandLineArguments(String[] args) throws CmdLineException {
         CmdLineParser parser = new CmdLineParser(this);
         parser.parseArgument(args);
-        if (files == null) throw new CmdLineException("No files");
+        if (files == null) throw new CmdLineException(parser, "No files");
         this.base = this.base1000 ? 1000 : 1024;
     }
 }

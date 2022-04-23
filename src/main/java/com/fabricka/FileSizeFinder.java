@@ -12,6 +12,7 @@ public class FileSizeFinder {
     public static class FileInfo { // private done !!!
         private final File file;
         private final String size;
+
         public FileInfo(File file, String size) {
             this.file = file;
             this.size = size;
@@ -23,6 +24,19 @@ public class FileSizeFinder {
 
         public String getSize() {
             return size;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (this == other) return true;
+            if (other == null || getClass() != other.getClass()) return false;
+            FileInfo fileInfo = (FileInfo) other;
+            return Objects.equals(file, fileInfo.file) && Objects.equals(size, fileInfo.size);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(file, size);
         }
     }
 

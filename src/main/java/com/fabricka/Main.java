@@ -5,8 +5,6 @@ import org.kohsuke.args4j.CmdLineException;
 import java.io.File;
 
 // long может хранить до 8388607 Тб, этого более чем достаточно
-
-
 public class Main {
     public static void main(String[] args) {
         CommandLineArguments cmdArgs;

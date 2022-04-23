@@ -1,8 +1,8 @@
+package com.fabricka;
+
 import java.io.File;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,10 +14,10 @@ public class MainTest {
     final String PARENT_PATH = "src/test/resources/";
 
     final File[] files = new File[]{
-            getTestFile("somefile1.txt"),
+            getTestFile("com/fabricka/somefile1.txt"),
             getTestFile("directory1"),
             getTestFile("directory3"),
-            getTestFile("directory1\\somefile3.txt"),
+            getTestFile("directory1/somefile3.txt"),
     };
     final long[] fileSizes = new long[]{
             50,
@@ -27,7 +27,7 @@ public class MainTest {
     };
 
     // {(true, 1024), (true, 1000), (false, 1024), (false, 1000)}
-    final Map<Long, String[]> byteSizeStringAnswers = new HashMap<Long, String[]>() {{
+    final Map<Long, String[]> byteSizeStringAnswers = new HashMap<>() {{
         put(fileSizes[0], new String[]{"50b", "50b", "0.05", "0.05"});
         put(fileSizes[1], new String[]{"4.03Mb", "4.22Mb", "4129.73", "4228.85"});
         put(fileSizes[2], new String[]{"0b", "0b", "0.00", "0.00"});
@@ -36,8 +36,13 @@ public class MainTest {
 
     // доступ к ресурсам
     private File getTestFile(String pathname) {
-//        return new File(this.getClass().getResource(pathname).getFile());
-        return new File(PARENT_PATH + pathname);
+        return new File(getClass().getResource(pathname).getFile());
+//        return new File(PARENT_PATH + pathname);
+    }
+
+    @Test
+    void someTest() {
+        System.out.println(getTestFile("somefile1.txt"));
     }
 
     @Test
